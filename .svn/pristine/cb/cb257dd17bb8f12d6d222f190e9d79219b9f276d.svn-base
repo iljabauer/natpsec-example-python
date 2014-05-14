@@ -1,0 +1,69 @@
+from natspec_utils.stringutils import stringToUnicode as u;
+
+import unittest
+from test.support import TestSupport
+from service.airline_service import AirlineService
+from persistence.in_memory_context import InMemoryPersistenceContext
+
+class CancelAndRebookSeat(unittest.TestCase):
+    def __init__(self):
+        self.service = AirlineService()
+        self.test_support = TestSupport(self.service, self.persistence_context, self)
+        self.persistence_context = InMemoryPersistenceContext()
+    
+    def setUp(self):
+        self.service = AirlineService()
+        self.persistence_context = InMemoryPersistenceContext()
+        self.test_support = TestSupport(self.service, self.persistence_context, self)
+        
+    def test(self):
+        """
+         The code in this method is generated from: /de.devboost.natspec.example.python/test/scenarios/cancel_and_rebook_seat.natspec
+         Never change this method or any contents of this file, all local changes will we overwritten.
+        """
+        # Given an airplane Boeing-737-600
+        airplaneType_Boeing_737_600 = self.test_support.given_an_airplane(u("Boeing-737-600"))
+        
+        # Given a flight LH-1234
+        flight_LH_1234 = self.test_support.given_a_flight(u("LH-1234"), airplaneType_Boeing_737_600)
+        
+        # that is executed using a Boeing-737-600
+        self.test_support.that_is_executed_using_a(u("Boeing-737-600"), flight_LH_1234)
+        
+        # With 1 free seats
+        self.test_support.with_free_seats(1, flight_LH_1234)
+        
+        # Given a passenger John Doe
+        passenger_John_Doe = self.test_support.given_a_passenger(u("John"), u("Doe"))
+        
+        # Given a passenger Jane Mejer
+        passenger_Jane_Mejer = self.test_support.given_a_passenger(u("Jane"), u("Mejer"))
+        
+        # Book seat for John Doe at LH-1234
+        operationStatus_John_Doe_LH_1234 = self.test_support.book_seat_for(u("John"), u("Doe"), u("LH-1234"))
+        
+        # Assume a valid ticket is issued
+        self.test_support.assume_valid_ticket(operationStatus_John_Doe_LH_1234)
+        
+        # Book seat for Jane Mejer at LH-1234
+        operationStatus_Jane_Mejer_LH_1234 = self.test_support.book_seat_for(u("Jane"), u("Mejer"), u("LH-1234"))
+        
+        # Assume no valid ticket is issued
+        self.test_support.assume_no_valid_ticked_is_issued(operationStatus_Jane_Mejer_LH_1234)
+        
+        # Cancel seat for John Doe at LH-1234
+        operationStatus_John_Doe_LH_12340 = self.test_support.cancel_seat_for(u("John"), u("Doe"), u("LH-1234"))
+        
+        # Assume cancellation successful
+        self.test_support.assume_valid_ticket(operationStatus_John_Doe_LH_12340)
+        
+        # Book seat for Jane Mejer at LH-1234
+        operationStatus_Jane_Mejer_LH_12340 = self.test_support.book_seat_for(u("Jane"), u("Mejer"), u("LH-1234"))
+        
+        # Assume a valid ticket is issued
+        self.test_support.assume_valid_ticket(operationStatus_Jane_Mejer_LH_12340)
+        
+        
+        
+if __name__ == '__main__':
+    unittest.main()

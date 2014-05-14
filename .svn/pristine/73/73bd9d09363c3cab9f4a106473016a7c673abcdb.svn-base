@@ -1,0 +1,16 @@
+from service.validation.rules import Rules
+from service.status import OperationStatus
+
+
+class AirlineService(object):
+    def book_seat(self, passenger, flight):
+        rules = Rules(flight, passenger)
+        status = rules.validate()
+        if status.valid:
+            flight.add_passenger(passenger)
+        return status
+    
+    def cancel_seat(self, passenger, flight):
+        if flight.remove_passenger(passenger):
+            return OperationStatus("Passenger was removed", True)
+        return OperationStatus("Passenger was not booked on flight", False)

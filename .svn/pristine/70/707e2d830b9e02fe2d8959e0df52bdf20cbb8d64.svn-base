@@ -1,0 +1,21 @@
+import unittest
+from test.support import TestSupport
+from service.airline_service import AirlineService
+from persistence.in_memory_context import InMemoryPersistenceContext
+
+class _NatSpecTemplate(unittest.TestCase):
+    def __init__(self):
+        self.service = AirlineService()
+        self.test_support = TestSupport(self.service, self.persistence_context, self)
+        self.persistence_context = InMemoryPersistenceContext()
+    
+    def setUp(self):
+        self.service = AirlineService()
+        self.persistence_context = InMemoryPersistenceContext()
+        self.test_support = TestSupport(self.service, self.persistence_context, self)
+        
+    def test(self):
+        """ @MethodBody """
+        
+if __name__ == '__main__':
+    unittest.main()

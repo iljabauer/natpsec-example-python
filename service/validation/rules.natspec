@@ -1,0 +1,6 @@
+There needs to be a free seat for the passenger.
+There should be at least 0 free seats to handle overbooking.
+Each Passenger can only be booked once.
+
+// Optional rule: 
+//The Passenger needs to be at least 18 years old.

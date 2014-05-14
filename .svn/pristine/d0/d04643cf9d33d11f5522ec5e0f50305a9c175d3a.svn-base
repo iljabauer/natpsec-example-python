@@ -1,0 +1,69 @@
+from natspec_utils.decorators import TextSyntax
+
+
+class TestSupport(object):
+    def __init__(self, service, persistence_context, test_case):
+        self.service = service
+        self.persistence_context = persistence_context
+        self.test_case = test_case
+        self.passengers = {}
+        self.flights = {}
+        self.airplane_types = {}
+
+    @TextSyntax(["Given a Passenger #1 #2"], types=["str", "str"], return_type="Passenger")
+    def given_a_passenger(self, first_name, last_name):
+        passenger = self.persistence_context.create_passenger(first_name, last_name)
+        self.passengers.update({"{0} {1}".format(first_name, last_name): passenger})
+        return passenger
+
+    @TextSyntax("With age of #2 years", types=["Passenger", "int"])
+    def with_age_of_years(self, passenger, age):
+        passenger.age = age
+
+    @TextSyntax(["Given an Airplane #1"], types=["str"], return_type="AirplaneType")
+    def given_an_airplane(self, name):
+        airplane_type = self.persistence_context.create_airplane_type(name)
+        self.airplane_types.update({name: airplane_type})
+        return airplane_type
+
+    @TextSyntax(["Given a flight #1"], types=["str", "AirplaneType"], return_type="Flight")
+    def given_a_flight(self, name, airplane):
+        flight = self.persistence_context.create_flight(name)
+        flight.airplane = airplane
+        self.flights.update({name: flight})
+        return flight
+
+    @TextSyntax("that is executed using a #1", types=["str", "Flight"])
+    def that_is_executed_using_a(self, airplane_name, flight):
+        airplane = self.airplane_types.get(airplane_name)
+        flight.airplane = airplane
+
+    @TextSyntax("With #1 free seats", types=["int", "Flight"])
+    def with_free_seats(self, free_seats, flight):
+        flight.free_seats = free_seats
+
+    @TextSyntax("Book seat for #1 #2 at #3", types=["str", "str", "str"], return_type="OperationStatus")
+    def book_seat_for(self, first_name, last_name, flight_name):
+        passenger = self.passengers.get("{0} {1}".format(first_name, last_name))
+        flight = self.flights.get(flight_name)
+        return self.service.book_seat(passenger, flight)
+
+    @TextSyntax("Cancel seat for #1 #2 at #3", types=["str", "str", "str"], return_type="OperationStatus")
+    def cancel_seat_for(self, first_name, last_name, flight_name):
+        passenger = self.passengers.get("{0} {1}".format(first_name, last_name))
+        flight = self.flights.get("{0}".format(flight_name))
+        return self.service.cancel_seat(passenger, flight)
+
+    @TextSyntax(["Assume a valid ticket is issued", "Assume cancellation successful"], types=["OperationStatus"])
+    def assume_valid_ticket(self, status):
+        self.test_case.assertTrue(status.valid, msg=status.msg)
+
+
+    @TextSyntax("Assume no valid ticket is issued", types=["OperationStatus"])
+    def assume_no_valid_ticked_is_issued(self, status):
+        self.test_case.assertFalse(status.valid, msg=status.msg)
+
+
+    @TextSyntax("Assume #1 has passenger #2", types=["Flight", "Passenger"])
+    def assume_has_passenger(self, flight, passenger):
+        self.test_case.assertTrue(flight.has_passenger(passenger))

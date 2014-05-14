@@ -1,0 +1,4 @@
+class OperationStatus(object):
+    def __init__(self, msg="", status=True):
+        self.msg = msg
+        self.valid = status

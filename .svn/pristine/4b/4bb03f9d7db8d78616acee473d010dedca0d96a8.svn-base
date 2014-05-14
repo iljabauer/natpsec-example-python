@@ -1,0 +1,70 @@
+class Entity(object):
+    # A global counter that holds the next available entity ID.
+    _counter = 0
+    
+    def __init__(self):
+        """Creates a new entity and initialized its ID."""
+        Entity._counter += 1
+        self.id = Entity._counter
+        
+    
+class NamedEntity(Entity):
+    def __init__(self, name):
+        super(NamedEntity, self).__init__()
+        self.name = name
+        
+        
+class Passenger(Entity):
+    def __init__(self, first_name, last_name):
+        super(Passenger, self).__init__()
+        self.first_name = first_name
+        self.last_name = last_name
+        self.age = 0
+        
+class Flight(NamedEntity):
+    def __init__(self, name):
+        super(Flight, self).__init__(name)
+        
+        self.__airplane = None
+        self.passenger_ids = []
+        self.__free_seats = 0
+
+    @property
+    def airplane(self):
+        return self._airplane
+    
+    @airplane.setter
+    def airplane(self, value):
+        self.__airplane = value
+        self.__free_seats = value.total_seats
+        
+    @property
+    def free_seats(self):
+        return self.__free_seats - len(self.passenger_ids)
+    
+    @free_seats.setter
+    def free_seats(self, value):
+        self.__free_seats = value
+    
+    def has_passenger(self, passenger):
+        return passenger.id in self.passenger_ids
+    
+    def add_passenger(self, passenger):
+        self.passenger_ids.append(passenger.id)
+        
+    def remove_passenger(self, passenger):
+        if passenger.id in self.passenger_ids:
+            self.passenger_ids.remove(passenger.id)
+            return True
+        return False
+    
+
+class AirplaneType(NamedEntity):
+    def __init__(self, name):
+        super(AirplaneType, self).__init__(name)
+        self.total_seats = 0
+    
+    
+        
+    
+        

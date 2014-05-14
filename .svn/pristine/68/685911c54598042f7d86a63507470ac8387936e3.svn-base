@@ -1,0 +1,8 @@
+from service.validation.support import ValidationSupport
+class _NatSpecTemplate(object):
+    def __init__(self, flight, passenger):
+        self.validation_support = ValidationSupport(flight, passenger)
+        
+    def validate(self):
+        """ @MethodBody """
+        return self.validation_support.status

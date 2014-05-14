@@ -1,0 +1,24 @@
+Given an airplane Boeing-737-600
+
+Given a flight LH-1234
+ that is executed using a Boeing-737-600
+ With 1 free seats
+
+Given a passenger John Doe
+Given a passenger Jane Mejer
+
+// first passenger
+Book seat for John Doe at LH-1234
+ Assume a valid ticket is issued
+
+// second passenger
+Book seat for Jane Mejer at LH-1234
+ Assume no valid ticket is issued
+
+// cancel first passenger
+Cancel seat for John Doe at LH-1234
+ Assume cancellation successful
+
+// rebook second passenger on now free set
+Book seat for Jane Mejer at LH-1234
+ Assume a valid ticket is issued
